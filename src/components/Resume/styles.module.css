@@ -1,0 +1,30 @@
+.resume {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.5rem; /* 24px */
+  margin-top: 4rem;
+}
+
+.resume > strong {
+  color: var(--blue);
+  font-size: 0.875rem;
+}
+
+.resume > strong + strong {
+  color: var(--purple);
+}
+
+.resume > strong > span {
+  background-color: var(--gray-400);
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+.divider {
+  height: 4.5rem; /* 72 */
+  border-radius: 0.5rem;
+  border-top: 1px solid var(--gray-400);
+}
