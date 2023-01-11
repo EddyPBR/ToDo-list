@@ -9,7 +9,7 @@ import clipboardSvg from "../../assets/clipboard.svg";
 interface IToDo {
   id: string;
   title: string;
-  isComplete: boolean;
+  isCompleted: boolean;
 }
 
 interface IToDoListProps {
@@ -25,7 +25,7 @@ export function ToDoList({ toDos, onChangeToDo }: IToDoListProps) {
 
   function checkToDo(id: string, value: boolean) {
     const updatedToDos = toDos.map((toDo) =>
-      toDo.id === id ? { ...toDo, isComplete: value } : toDo
+      toDo.id === id ? { ...toDo, isCompleted: value } : toDo
     );
     onChangeToDo(updatedToDos);
   }
@@ -52,7 +52,7 @@ export function ToDoList({ toDos, onChangeToDo }: IToDoListProps) {
         <Task
           key={toDo.id}
           title={toDo.title}
-          isChecked={toDo.isComplete}
+          isChecked={toDo.isCompleted}
           onDelete={() => deleteToDo(toDo.id)}
           onCheck={(value) => checkToDo(toDo.id, value)}
         />
