@@ -1,20 +1,28 @@
 import styles from "./styles.module.css";
 
 interface IResumeProps {
-  withDivider: boolean;
+  amount: number;
+  completedAmount: number;
+  withDivider?: boolean;
 }
 
-export function Resume({ withDivider = false }: IResumeProps) {
+export function Resume({
+  amount,
+  completedAmount,
+  withDivider = false,
+}: IResumeProps) {
   return (
     <>
       <header className={styles.resume}>
         <strong>
           Tarefas criadas
-          <span>0</span>
+          <span>{amount}</span>
         </strong>
         <strong>
           Concluídas
-          <span>0</span>
+          <span>
+            {completedAmount} de {amount}
+          </span>
         </strong>
       </header>
 

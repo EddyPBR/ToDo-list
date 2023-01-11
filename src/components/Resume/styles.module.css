@@ -16,6 +16,7 @@
 }
 
 .resume > strong > span {
+  color: var(--gray-200);
   background-color: var(--gray-400);
   border-radius: 9999px;
   padding: 0.125rem 0.5rem;
