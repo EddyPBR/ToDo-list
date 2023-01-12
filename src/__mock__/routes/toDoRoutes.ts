@@ -3,8 +3,8 @@ import { AppSchema } from "../types";
 
 export function toDoRoutes(server: Server) {
   server.get(`/todo`, (schema: AppSchema) => {
-    const todos = schema.all("toDo");
+    const toDos = schema.all("toDo");
 
-    return new Response(200, {}, todos);
+    return new Response(200, {}, toDos);
   });
 }
