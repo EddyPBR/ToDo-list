@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { Task } from "../Task";
 
 import styles from "./styles.module.css";
@@ -51,9 +49,10 @@ export function ToDoList({ toDos, onChangeToDo }: IToDoListProps) {
       {toDos.map((toDo) => (
         <Task
           key={toDo.id}
+          id={toDo.id}
           title={toDo.title}
           isChecked={toDo.isCompleted}
-          onDelete={() => deleteToDo(toDo.id)}
+          onDeleteSuccess={() => deleteToDo(toDo.id)}
           onCheck={(value) => checkToDo(toDo.id, value)}
         />
       ))}
