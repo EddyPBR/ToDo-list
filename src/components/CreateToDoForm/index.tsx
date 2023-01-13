@@ -1,33 +1,38 @@
 import { PlusCircle } from "phosphor-react";
 import { FormEvent, useState } from "react";
+import toast from "react-hot-toast";
+import { Oval, TailSpin } from "react-loader-spinner";
+
+import { createToDo, IToDoDTO } from "../../api/toDo";
 
 import styles from "./styles.module.css";
 
-interface IToDo {
-  id: string;
-  title: string;
-  isCompleted: boolean;
+interface CreateToDoForm {
+  onCreateSuccess: (toDo: IToDoDTO) => void;
 }
 
-interface INewTaskProps {
-  onCreateToDo: (toDo: IToDo) => void;
-}
-
-export function CreateToDoForm({ onCreateToDo }: INewTaskProps) {
+export function CreateToDoForm({ onCreateSuccess }: CreateToDoForm) {
   const [title, setTitle] = useState("");
+  const [isCreatingTodo, setIsCreatingTodo] = useState(false);
 
-  function handleCreateToDo(event: FormEvent) {
+  async function handleCreateToDo(event: FormEvent) {
     event.preventDefault();
 
-    const newToDo: IToDo = {
-      id: crypto.randomUUID(),
-      title,
-      isCompleted: false,
-    };
+    try {
+      setIsCreatingTodo(true);
 
-    onCreateToDo(newToDo);
+      const response = await createToDo({ title });
 
-    setTitle("");
+      toast.success("Tarefa foi criada com sucesso!");
+
+      onCreateSuccess(response.data.toDo);
+
+      setTitle("");
+    } catch (error: any) {
+      toast.error(error?.message);
+    } finally {
+      setIsCreatingTodo(false);
+    }
   }
 
   return (
@@ -38,10 +43,16 @@ export function CreateToDoForm({ onCreateToDo }: INewTaskProps) {
         className={styles.input}
         value={title}
         onChange={(event) => setTitle(event.target.value)}
+        disabled={isCreatingTodo}
         required
       />
-      <button type="submit" className={styles.button}>
-        Criar <PlusCircle size={18} />
+      <button type="submit" disabled={isCreatingTodo} className={styles.button}>
+        Criar
+        {isCreatingTodo ? (
+          <TailSpin color="#fff" height={18} width={18} visible={true} />
+        ) : (
+          <PlusCircle size={18} />
+        )}
       </button>
     </form>
   );

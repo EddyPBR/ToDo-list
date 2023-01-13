@@ -42,7 +42,7 @@ export function App() {
       <Header />
       <Container>
         <CreateToDoForm
-          onCreateToDo={(newToDo) =>
+          onCreateSuccess={(newToDo) =>
             setToDos((current) => [...current, newToDo])
           }
         />
