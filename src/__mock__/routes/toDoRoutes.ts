@@ -16,7 +16,7 @@ export function toDoRoutes(server: Server) {
     const { title } = JSON.parse(requestBody) as ICreateToDoBody;
 
     if (!title) {
-      return new Response(400, {}, { message: "Title is required!" });
+      return new Response(400, {}, { message: "Faltando o título da tarefa!" });
     }
 
     const newToDo = schema.create("toDo", {
@@ -26,5 +26,23 @@ export function toDoRoutes(server: Server) {
     });
 
     return new Response(202, {}, { toDo: newToDo });
+  });
+
+  server.delete(`/todo/:id`, (schema: AppSchema, { params }) => {
+    const { id } = params;
+
+    if (!id) {
+      return new Response(400, {}, { message: "Faltando ID da tarefa!" });
+    }
+
+    const toDoExists = schema.find("toDo", id);
+
+    if (!toDoExists) {
+      return new Response(404, {}, { message: "Tarefa não foi encontrada!" });
+    }
+
+    toDoExists.destroy();
+
+    return new Response(202);
   });
 }
