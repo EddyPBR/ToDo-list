@@ -22,6 +22,12 @@ interface IDeleteToDoParams {
   id: string;
 }
 
+interface IUpdateToDoBody {
+  id: string;
+  title?: string;
+  isCompleted?: boolean;
+}
+
 export async function getTodos() {
   try {
     return await api.get<IGetToDosResponse>("/todo");
@@ -43,6 +49,17 @@ export async function createToDo({ title }: ICreateToDoBody) {
 export async function deleteToDo({ id }: IDeleteToDoParams) {
   try {
     return await api.delete<ICreateToDoResponse>(`/todo/${id}`);
+  } catch (error: any) {
+    throw apiException(error as Error);
+  }
+}
+
+export async function updateToDo({ id, isCompleted, title }: IUpdateToDoBody) {
+  try {
+    return await api.patch<ICreateToDoResponse>(`/todo/${id}`, {
+      title,
+      isCompleted,
+    });
   } catch (error: any) {
     throw apiException(error as Error);
   }
