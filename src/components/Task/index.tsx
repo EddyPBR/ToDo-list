@@ -1,8 +1,8 @@
 import { Trash } from "phosphor-react";
 import { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
-import { Discuss } from "react-loader-spinner";
-import { deleteToDo } from "../../api/toDo";
+import { Discuss, Puff } from "react-loader-spinner";
+import { deleteToDo, updateToDo } from "../../api/toDo";
 import styles from "./styles.module.css";
 
 interface ITaskProps {
@@ -21,11 +21,7 @@ export function Task({
   onDeleteSuccess,
 }: ITaskProps) {
   const [isDeletingToDo, setIsDeletingToDo] = useState(false);
-
-  function onChange(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.checked;
-    onCheck(value);
-  }
+  const [isUpdatingToDo, setIsUpdatingToDo] = useState(false);
 
   async function handleDeleteToDo() {
     try {
@@ -43,9 +39,39 @@ export function Task({
     }
   }
 
+  async function handleUpdateToDo(isCompleted: boolean) {
+    try {
+      setIsUpdatingToDo(true);
+
+      await updateToDo({ id, isCompleted });
+
+      toast.success(
+        isCompleted
+          ? "Tarefa marcada concluída"
+          : "Tarefa marcada como NÃO concluída"
+      );
+
+      onCheck(isCompleted);
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsUpdatingToDo(false);
+    }
+  }
+
   return (
     <div className={styles.task}>
-      <input type="checkbox" checked={isChecked} onChange={onChange} />
+      {
+        isUpdatingToDo
+          ? <Puff height={20} width={20} color="#4ea8de" />
+          : (
+            <input
+              type="checkbox"
+              checked={isChecked}
+              onChange={(event) => handleUpdateToDo(event.target.checked)}
+            />
+          )
+      }
       {isChecked ? <del>{title}</del> : <p>{title}</p>}
       <button
         type="button"
