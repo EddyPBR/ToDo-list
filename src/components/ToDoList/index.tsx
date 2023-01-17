@@ -12,22 +12,11 @@ interface IToDo {
 
 interface IToDoListProps {
   toDos: IToDo[];
-  onChangeToDo: (toDos: IToDo[]) => void;
+  onDeleteToDo: (id: string) => Promise<void>;
+  onCheckToDo: (id: string, isCompleted: boolean) => Promise<void>;
 }
 
-export function ToDoList({ toDos, onChangeToDo }: IToDoListProps) {
-  function deleteToDo(id: string) {
-    const updatedToDos = toDos.filter((toDo) => toDo.id !== id);
-    onChangeToDo(updatedToDos);
-  }
-
-  function checkToDo(id: string, value: boolean) {
-    const updatedToDos = toDos.map((toDo) =>
-      toDo.id === id ? { ...toDo, isCompleted: value } : toDo
-    );
-    onChangeToDo(updatedToDos);
-  }
-
+export function ToDoList({ toDos, onDeleteToDo, onCheckToDo }: IToDoListProps) {
   if (toDos.length === 0) {
     return (
       <section className={styles.empty}>
@@ -52,8 +41,8 @@ export function ToDoList({ toDos, onChangeToDo }: IToDoListProps) {
           id={toDo.id}
           title={toDo.title}
           isChecked={toDo.isCompleted}
-          onDeleteSuccess={() => deleteToDo(toDo.id)}
-          onCheck={(value) => checkToDo(toDo.id, value)}
+          onDeleteToDo={onDeleteToDo}
+          onCheckToDo={onCheckToDo}
         />
       ))}
     </section>

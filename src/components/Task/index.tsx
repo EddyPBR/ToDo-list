@@ -9,16 +9,16 @@ interface ITaskProps {
   id: string;
   title: string;
   isChecked: boolean;
-  onCheck: (value: boolean) => void;
-  onDeleteSuccess: (toDoId: string) => void;
+  onDeleteToDo: (toDoId: string) => Promise<void>;
+  onCheckToDo: (toDoId: string, isCompleted: boolean) => Promise<void>;
 }
 
 export function Task({
   id,
   title,
   isChecked,
-  onCheck,
-  onDeleteSuccess,
+  onDeleteToDo,
+  onCheckToDo,
 }: ITaskProps) {
   const [isDeletingToDo, setIsDeletingToDo] = useState(false);
   const [isUpdatingToDo, setIsUpdatingToDo] = useState(false);
@@ -27,11 +27,7 @@ export function Task({
     try {
       setIsDeletingToDo(true);
 
-      await deleteToDo({ id });
-
-      toast.success("Tarefa removida");
-
-      onDeleteSuccess(id);
+      await onDeleteToDo(id);
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -39,19 +35,11 @@ export function Task({
     }
   }
 
-  async function handleUpdateToDo(isCompleted: boolean) {
+  async function handleCheckToDo(isCompleted: boolean) {
     try {
       setIsUpdatingToDo(true);
 
-      await updateToDo({ id, isCompleted });
-
-      toast.success(
-        isCompleted
-          ? "Tarefa marcada concluída"
-          : "Tarefa marcada como NÃO concluída"
-      );
-
-      onCheck(isCompleted);
+      await onCheckToDo(id, isCompleted);
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -61,17 +49,15 @@ export function Task({
 
   return (
     <div className={styles.task}>
-      {
-        isUpdatingToDo
-          ? <Puff height={20} width={20} color="#4ea8de" />
-          : (
-            <input
-              type="checkbox"
-              checked={isChecked}
-              onChange={(event) => handleUpdateToDo(event.target.checked)}
-            />
-          )
-      }
+      {isUpdatingToDo ? (
+        <Puff height={20} width={20} color="#4ea8de" />
+      ) : (
+        <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={(event) => handleCheckToDo(event.target.checked)}
+        />
+      )}
       {isChecked ? <del>{title}</del> : <p>{title}</p>}
       <button
         type="button"

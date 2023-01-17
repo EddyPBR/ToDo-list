@@ -1,17 +1,15 @@
 import { PlusCircle } from "phosphor-react";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
-import { Oval, TailSpin } from "react-loader-spinner";
-
-import { createToDo, IToDoDTO } from "../../api/toDo";
+import { TailSpin } from "react-loader-spinner";
 
 import styles from "./styles.module.css";
 
 interface CreateToDoForm {
-  onCreateSuccess: (toDo: IToDoDTO) => void;
+  onCreateToDo: (title: string) => Promise<void>;
 }
 
-export function CreateToDoForm({ onCreateSuccess }: CreateToDoForm) {
+export function CreateToDoForm({ onCreateToDo }: CreateToDoForm) {
   const [title, setTitle] = useState("");
   const [isCreatingTodo, setIsCreatingTodo] = useState(false);
 
@@ -21,11 +19,7 @@ export function CreateToDoForm({ onCreateSuccess }: CreateToDoForm) {
     try {
       setIsCreatingTodo(true);
 
-      const response = await createToDo({ title });
-
-      toast.success("Tarefa foi criada com sucesso!");
-
-      onCreateSuccess(response.data.toDo);
+      await onCreateToDo(title);
 
       setTitle("");
     } catch (error: any) {
