@@ -1,3 +1,5 @@
+![Capa do projeto ToDo](/.github/front.svg "Projeto ToDo desenvolvido por EddyPBR")
+
 # ToDo
 
 O projeto <b>ToDo</b> consiste em um gerenciador de tarefas para que os usuários possam
