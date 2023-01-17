@@ -1,7 +1,7 @@
 # ToDo
 
-O projeto <b>ToDo</b> consiste em um gerenciador de tarefas para que os usuários possam 
-ter controle de tarefas simples e corriqueiras. Este projeto faz parte de 
+O projeto <b>ToDo</b> consiste em um gerenciador de tarefas para que os usuários possam
+ter controle de tarefas simples e corriqueiras. Este projeto faz parte de
 um dos desafios propostos pela [@Rocketseat](https://www.instagram.com/rocketseat/)
 em seu bootcamp denominado Ignite.
 
@@ -14,7 +14,7 @@ em seu bootcamp denominado Ignite.
 
 ## Layout
 
-O layout foi desenvolvido pela [@Millena Kupsinskü Martins](https://www.instagram.com/millenakmartins/) 
+O layout foi desenvolvido pela [@Millena Kupsinskü Martins](https://www.instagram.com/millenakmartins/)
 UI/UX na Rocketseat, ressaltando que todo layout é desenvolvido por eles.
 
 O projeto foi desenvolvido no curso do ignite da Rocketseat
@@ -37,7 +37,7 @@ Existem duas branchs, são elas:
 
 - MASTER: Já com o próximo nível da aplicação com api rest mocaada, toasts e animações
 - BASE: Que consiste somente na conclusão do desafio que é copiar a interface e
-fazer com que os componentes se comuniquem dinamicamente sem utilização de qualquer API REST.
+  fazer com que os componentes se comuniquem dinamicamente sem utilização de qualquer API REST.
 
 ## Colocando o projeto para rodar
 
