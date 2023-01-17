@@ -3,7 +3,13 @@ import { useEffect, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import toast, { Toaster } from "react-hot-toast";
 
-import { getTodos, IToDoDTO } from "./api/toDo";
+import {
+  getTodos,
+  deleteToDo,
+  updateToDo,
+  createToDo,
+  IToDoDTO,
+} from "./api/toDo";
 
 import { Container } from "./components/Container";
 import { CreateToDoForm } from "./components/CreateToDoForm";
@@ -18,7 +24,7 @@ export function App() {
   const amountToDos = toDos.length;
   const completedToDosAmount = toDos.filter((toDo) => toDo.isCompleted).length;
 
-  async function loadTodos() {
+  async function fetchGetToDos() {
     try {
       setIsLoadingToDos(true);
       const response = await getTodos();
@@ -31,9 +37,55 @@ export function App() {
     }
   }
 
+  async function fetchDeleteToDo(id: string) {
+    try {
+      await deleteToDo({ id });
+
+      toast.success("Tarefa removida");
+
+      setToDos((toDos) => toDos.filter((toDo) => toDo.id !== id));
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  }
+
+  async function fetchCheckToDo(id: string, isCompleted: boolean) {
+    try {
+      await updateToDo({ id, isCompleted });
+
+      toast.success(
+        isCompleted
+          ? "Tarefa marcada concluída"
+          : "Tarefa marcada como NÃO concluída"
+      );
+
+      setToDos((toDos) =>
+        toDos.map((toDo) =>
+          toDo.id === id ? { ...toDo, isCompleted: isCompleted } : toDo
+        )
+      );
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  }
+
+  async function fetchCreateToDo(title: string) {
+    try {
+      const response = await createToDo({ title });
+
+      toast.success("Tarefa foi criada com sucesso!");
+
+      const toDo = response.data.toDo;
+
+      setToDos((toDos) => [...toDos, toDo]);
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  }
+
   useEffect(() => {
     return () => {
-      loadTodos();
+      fetchGetToDos();
     };
   }, []);
 
@@ -41,11 +93,7 @@ export function App() {
     <SkeletonTheme baseColor="#262626" highlightColor="#333333">
       <Header />
       <Container>
-        <CreateToDoForm
-          onCreateSuccess={(newToDo) =>
-            setToDos((current) => [...current, newToDo])
-          }
-        />
+        <CreateToDoForm onCreateToDo={fetchCreateToDo} />
 
         <main style={{ width: "100%" }}>
           <Resume
@@ -62,7 +110,11 @@ export function App() {
               style={{ marginBottom: "0.7rem" }}
             />
           ) : (
-            <ToDoList toDos={toDos} onChangeToDo={setToDos} />
+            <ToDoList
+              toDos={toDos}
+              onDeleteToDo={fetchDeleteToDo}
+              onCheckToDo={fetchCheckToDo}
+            />
           )}
         </main>
       </Container>
